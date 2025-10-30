@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Welcome to the secret room made by Rafiul Islam ✨🥳</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap');
+
+    :root {
+      --accent: #ff4f81;
+      --muted: #777;
+      --bg: #fff0f5;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #fff0f5 0%, #fff 60%);
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    /* LOCK OVERLAY */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .locker {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      padding: 28px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .locker h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.4rem;
+      margin: 6px 0;
+      color: var(--accent)
+    }
+
+    .locker p {
+      color: var(--muted);
+      margin: 8px 0 18px
+    }
+
+    .locker input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #eee;
+      font-size: 1rem;
+      margin-bottom: 12px
+    }
+
+    .locker .row {
+      display: flex;
+      gap: 8px
+    }
+
+    .locker button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer
+    }
+
+    .tiny {
+      font-size: 0.86rem;
+      color: #999;
+      margin-top: 8px
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 28px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      z-index: 99999;
+      opacity: 0;
+      pointer-events: none;
+      transition: all .35s
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-6px);
+      pointer-events: auto
+    }
+
+    .toast.success {
+      border: 2px solid #dff6ea
+    }
+
+    .toast.fail {
+      border: 2px solid #ffd7e6
+    }
+
+    /* CARD CONTENT */
+    .card {
+      background: white;
+      padding: 26px;
+      border-radius: 14px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      max-width: 980px;
+      width: 100%;
+      z-index: 2;
+      position: relative
+    }
+
+    .top-row {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      justify-content: center
+    }
+
+    .photo {
+      width: 175px;
+      height: 250px;
+      border-radius: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08)
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    .meta {
+      max-width: 520px;
+      text-align: left
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      margin: 6px 0;
+      color: var(--accent)
+    }
+
+    p.lead {
+      margin: 6px 0;
+      color: #555;
+      font-size: 1.05rem
+    }
+
+    .quote {
+      font-style: italic;
+      color: var(--muted);
+      min-height: 44px
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 14px
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 0;
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+      font-weight: 600
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--accent)
+    }
+
+    .countdown {
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 10px
+    }
+
+    footer {
+      margin-top: 14px;
+      color: #999;
+      font-size: 0.9rem
+    }
+
+    /* CONFETTI CANVAS */
+    canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1
+    }
+
+    /* RESPONSIVE */
+    @media (max-width:780px) {
+      .top-row {
+        flex-direction: column
+      }
+
+      .photo {
+        width: 180px;
+        height: 200px
+      }
+
+      h1 {
+        font-size: 2.2rem
+      }
+
+      .meta {
+        text-align: center
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOCK OVERLAY: password required to see page. Change `PASSWORD` in the script below. -->
+  <div id="lock" class="overlay" aria-hidden="false">
+    <div class="locker" role="dialog" aria-modal="true">
+      <h2>Shhh... Surprise Incoming 🎉</h2>
+      <p>Type the secret password to reveal the birthday surprise. Hint: it's sweet & starts with J.F 😉</p>
+      <input id="pw" type="password" placeholder="Enter the secret password" autocomplete="off" />
+      <div class="row">
+        <button id="unlockBtn">Open</button>
+        <button id="hintBtn" class="ghost btn">Need a hint?</button>
+      </div>
+      <!-- <div class="tiny">If you want to change the password, open the HTML and edit the <code>PASSWORD</code> constant in
+        the script.</div> -->
+    </div>
+  </div>
+
+  <!-- TOAST MESSAGE -->
+  <div id="toast" class="toast"> <span id="toastText">Hello, Hiya! 😮‍💨</span></div>
+
+  <!-- MAIN CARD (hidden under overlay until unlocked) -->
+  <div id="mainContent" class="card" style="display:none">
+    <div class="top-row">
+      <div class="photo" id="friendPhoto">
+        <!-- Replace the src with your friend's picture. Keep aspect ratio 4:3 or 1:1 -->
+        <img
+          src="Picture.jpg"
+          alt="Image here" />
+      </div>
+      <div class="meta">
+        <h1 id="title">Happy Birthday, Bestie! 🎂</h1>
+        <h1 id="title">Jannatul Ferdios Hiya</h1>
+        <p class="lead">Wishing you a day full with laughs, cake and sweet memories. You're irreplaceable.</p>
+        <p id="quote" class="quote">"Make a wish — but pick an awesome one."</p>
+        <div class="countdown" id="countdown">Loading countdown...</div>
+        <div class="controls">
+          <button class="btn" id="playBtn">Play Song 🎶</button>
+          <button class="btn ghost" id="pauseBtn">Pause</button>
+          <button class="btn ghost" id="fullscreenBtn">Fullscreen ✨</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>Made with ❤️ by Rafiul Islam | 2025.</footer>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <!-- AUDIO: Edit MUSIC_SRC to replace with a proper Happy Birthday track (MP3/OGG). -->
+  <audio id="music" loop preload="auto"></audio>
+
+  <script>
+    // ========= CONFIG (change these only) ==========
+    const PASSWORD = 'Jannatul Ferdious'; // <-- set the secret password here (case-sensitive)
+    // const MUSIC_SRC = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; // replace with a happy-birthday mp3 if you have one
+    // If you want the birthday to be "tomorrow" (user said tomorrow), we'll compute it automatically below.
+    // ===============================================
+
+    const lockEl = document.getElementById('lock');
+    const mainEl = document.getElementById('mainContent');
+    const unlockBtn = document.getElementById('unlockBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const pwInput = document.getElementById('pw');
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toastText');
+    const music = document.getElementById('music');
+    const playBtn = document.getElementById('playBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    // Set audio source
+    music.src = 'happy-birthday-357371.mp3'; // <-- set your music file here
+
+    // Small toast utility
+    function showToast(message, ok = true) {
+      toastText.textContent = message;
+      toast.className = 'toast ' + (ok ? 'success' : 'fail');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3600);
+    }
+
+    // Unlock logic
+    function unlockIfCorrect(entered) {
+      if (!entered) return showToast('Type something, silly!', false);
+      if (entered === PASSWORD) {
+        // nice
+        localStorage.setItem('birthday_unlocked', '1');
+        lockEl.style.display = 'none';
+        mainEl.style.display = 'block';
+        showToast('Yesss — welcome to the secret room! 🎉');
+        startAfterUnlock();
+      } else {
+        // funny wrong messages randomized
+        const wrong = [
+          "Nope — cake's not in that box.",
+          "Ahh, try again — the cake's shy.",
+          "Wrong password. Did you try '123456'? Nah 🤣🤣🤣.",
+          "Close... but very far 😒.",
+          "Wrong key. Kisob type korchis bhai!."
+        ];
+        const msg = wrong[Math.floor(Math.random() * wrong.length)];
+        showToast(msg, false);
+        pwInput.value = '';
+        pwInput.focus();
+      }
+    }
+
+    unlockBtn.addEventListener('click', () => unlockIfCorrect(pwInput.value.trim()));
+    pwInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') unlockIfCorrect(pwInput.value.trim()); });
+
+    hintBtn.addEventListener('click', () => showToast('Hint: think sweet. Maybe something the cake whispered for... 🍰🥺'));
+
+    // If already unlocked before in this browser, keep unlocked
+    // if (localStorage.getItem('birthday_unlocked') === '1') {
+    //   lockEl.style.display = 'none';
+    //   mainEl.style.display = 'block';
+    //   // start the rest
+    //   setTimeout(startAfterUnlock, 300);
+    // }
+
+    // START AFTER UNLOCK: confetti, countdown, quotes, music controls
+    function startAfterUnlock() {
+      initConfetti();
+      initCountdown();
+      initQuotes();
+    }
+
+    // ================== COUNTDOWN (target = tomorrow at 00:00 local time) ==================
+    function initCountdown() {
+      const countdownEl = document.getElementById('countdown');
+      // Compute tomorrow's date at 00:00:00 local time (user said "tomorrow")
+      const now = new Date();
+      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+      const target = tomorrow.getTime();
+
+      function update() {
+        const nowT = Date.now();
+        let diff = target - nowT;
+        if (diff <= 0) {
+          countdownEl.textContent = "It's your birthdayyyy!! 🎉🎂";
+          return;
+        }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        diff -= days * (1000 * 60 * 60 * 24);
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        diff -= hours * (1000 * 60 * 60);
+        const minutes = Math.floor(diff / (1000 * 60));
+        diff -= minutes * (1000 * 60);
+        const seconds = Math.floor(diff / 1000);
+        countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s until the special day`;
+      }
+      update();
+      setInterval(update, 1000);
+    }
+
+    // ================== QUOTES rotation ==================
+    function initQuotes() {
+      const quotes = [
+        "May your birthday be as special as you are. ✨",
+        "You’re not just a year older, you’re a year better!",
+        "The world just got 1 year luckier having you.",
+        "Wishing you love, laughter, and cake—lots of cake!",
+        "Another year of awesome. Keep shining!",
+        "May your day be as amazing as your selfies.",
+        "Cheers to you and your amazing journey ahead.",
+        "To the one who makes life fun — happy b'day Hiya!",
+        "Eat cake. Be kind. Smile lots. Repeat Forever 🥺✨.",
+        "Make a wish and blow out the candles!"
+      ];
+      const el = document.getElementById('quote');
+      let i = 0;
+      el.textContent = quotes[0];
+      setInterval(() => {
+        el.style.opacity = 0;
+        setTimeout(() => {
+          i = (i + 1) % quotes.length;
+          el.textContent = quotes[i];
+          el.style.opacity = 1;
+        }, 600);
+      }, 7000);
+    }
+
+    // ================== CONFETTI (simple particle system) ==================
+    function initConfetti() {
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      function resize() { canvas.width = innerWidth; canvas.height = innerHeight }
+      addEventListener('resize', resize); resize();
+
+      const pieces = [];
+      const colors = ['#ff4f81', '#ffd166', '#06d6a0', '#4cc9f0', '#9b5de5'];
+      for (let i = 0; i < 120; i++) {
+        pieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 8 + 4,
+          tilt: Math.random() * 0.5 - 0.25,
+          speed: Math.random() * 3 + 1,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (const p of pieces) {
+          ctx.beginPath();
+          ctx.ellipse(p.x, p.y, p.r, p.r * 0.6, p.tilt, 0, Math.PI * 2);
+          ctx.fillStyle = p.color; ctx.fill();
+          p.y += p.speed; p.x += Math.sin(p.y / 20) * 1.5; p.tilt += 0.01;
+          if (p.y > canvas.height + 20) { p.y = -40; p.x = Math.random() * canvas.width }
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    // ================== MUSIC CONTROLS ==================
+    playBtn.addEventListener('click', () => {
+      music.play().then(() => showToast('Let the vibes roll 🎶'))
+        .catch(() => showToast('Autoplay blocked — tap play on your device', false));
+    });
+    pauseBtn.addEventListener('click', () => { music.pause(); showToast('Paused ✋') });
+
+    // Fullscreen trick for drama
+    fullscreenBtn.addEventListener('click', () => {
+      const el = document.documentElement;
+      if (!document.fullscreenElement) el.requestFullscreen().catch(() => showToast('Fullscreen denied', false));
+      else document.exitFullscreen();
+    });
+
+    // Accessibility: focus password input on load
+    pwInput.focus();
+
+    // ====== Nice-to-have: let user replace photo by dropping an image onto .photo element =====
+    const photoWrap = document.getElementById('friendPhoto');
+    photoWrap.addEventListener('dragover', e => { e.preventDefault(); photoWrap.style.opacity = 0.85 });
+    photoWrap.addEventListener('dragleave', e => { photoWrap.style.opacity = 1 });
+    photoWrap.addEventListener('drop', e => {
+      e.preventDefault(); photoWrap.style.opacity = 1;
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => { photoWrap.querySelector('img').src = reader.result; showToast('Photo updated — looking cute!'); }
+      reader.readAsDataURL(file);
+    });
+
+    // Quick tip: press the hint button for a silly hint. Also, change PASSWORD constant at top to customize.
+
+  </script>
+</body>
+
+</html>
