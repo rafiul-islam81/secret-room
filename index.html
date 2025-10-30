@@ -391,18 +391,15 @@
     function initCountdown() {
       const countdownEl = document.getElementById('countdown');
       // Compute tomorrow's date at 00:00:00 local time (user said "tomorrow")
-      const now = new Date();
+      /*const now = new Date();
       const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
-      const target = tomorrow.getTime();
+      const target = tomorrow.getTime();*/
 
       function update() {
-        const nowT = Date.now();
-        let diff = target - nowT;
-        if (diff <= 0) {
           countdownEl.textContent = "It's your birthdayyyy!! 🎉🎂";
           return;
         }
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        /*const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         diff -= days * (1000 * 60 * 60 * 24);
         const hours = Math.floor(diff / (1000 * 60 * 60));
         diff -= hours * (1000 * 60 * 60);
@@ -410,9 +407,9 @@
         diff -= minutes * (1000 * 60);
         const seconds = Math.floor(diff / 1000);
         countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s until the special day`;
-      }
+      }*/
       update();
-      setInterval(update, 1000);
+      //setInterval(update, 1000);
     }
 
     // ================== QUOTES rotation ==================
